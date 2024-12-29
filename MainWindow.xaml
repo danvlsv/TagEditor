@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<winex:WindowEx
+    x:Class="TagEditor.MainWindow"
+    xmlns:winex="using:WinUIEx"
+    
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TagEditor"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="TagEditor">
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border x:Name="AppTitleBar" VerticalAlignment="Stretch" >
+            <StackPanel Orientation="Horizontal" Margin="15,0">
+                <TextBlock x:Name="AppTittle" Text="TagEditor" VerticalAlignment="Center"/>
+            </StackPanel>
+
+        </Border>
+
+
+        <StackPanel x:Name="Welcome" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button x:Name="WelcomeButton" Click="WelcomeButton_Click">Открыть файл</Button>
+        </StackPanel>
+
+        <Grid x:Name ="Editor" Grid.Row="1" Margin="15,10" ColumnDefinitions="*,*" RowDefinitions="*,50,50">
+            <StackPanel Grid.Row="0" Grid.Column="0" Spacing="10" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
+
+
+
+                <TextBlock>Название:</TextBlock>
+                <TextBox x:Name="SongTitle" ></TextBox>
+
+                <TextBlock>Автор:</TextBlock>
+                <TextBox x:Name="Artist" Width="300"></TextBox>
+
+                <TextBlock>Альбом:</TextBlock>
+                <TextBox x:Name="Album" Width="300"></TextBox>
+
+                <TextBlock>Год выхода:</TextBlock>
+                <DatePicker Language="ru" x:Name="YearOfRelease" DayVisible="False" MonthVisible="False" />
+
+                <TextBlock>Номер диска:</TextBlock>
+                <NumberBox x:Name="DiscNumber" Minimum="0"/>
+
+            </StackPanel>
+
+            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <Border Width="300" Height="300" CornerRadius="10">
+                    <Image Width="300" Height="300"  x:Name="Art" ></Image>
+                </Border>
+                <MediaPlayerElement x:Name="MusicPlayer"
+                  AreTransportControlsEnabled="True"
+                                    
+                               
+                  >
+                    <MediaPlayerElement.TransportControls>
+                        <MediaTransportControls IsCompact="True" IsZoomButtonVisible="False"/>
+                        <!--IsCompactOverlayButtonVisible="False"/>-->
+                    </MediaPlayerElement.TransportControls>
+                    
+                </MediaPlayerElement>
+            </StackPanel>
+
+            <StackPanel  Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Margin="0,0,10,0">Файл:</TextBlock>
+                <TextBlock Width="Auto"  Name="FilePath" />
+            </StackPanel>
+           
+
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <Button Name="OpenDifferentButton" Click="OpenDifferentButton_Click">Открыть другой файл</Button>
+            </StackPanel>
+        </Grid>
+
+    </Grid>
+</winex:WindowEx>

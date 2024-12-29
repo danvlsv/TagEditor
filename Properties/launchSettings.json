@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "TagEditor (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "TagEditor (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
