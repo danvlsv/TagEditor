@@ -13,9 +13,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <Content Remove="Assets\tempCat.jpg" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Remove="Assets\tempCat.jpg" />
     <None Remove="Files\SongListElement.xaml" />
   </ItemGroup>
 
@@ -50,6 +48,11 @@
     <PackageReference Include="System.Drawing.Common" Version="9.0.0" />
     <PackageReference Include="TagLibSharp" Version="2.3.0" />
     <PackageReference Include="WinUIEx" Version="2.5.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="Assets\tempCat.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Files\SongListElement.xaml">

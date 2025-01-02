@@ -12,9 +12,8 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
-//using System.Windows.Media.Imaging;
 using Microsoft.UI.Xaml.Media.Imaging;
-using Microsoft.UI.Xaml.Media;
+
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -23,11 +22,20 @@ namespace TagEditor.Files
 {
     public sealed partial class SongListElement : UserControl
     {
-        public SongListElement()
+        public SongListElement(MainWindow mainWindow)
         {
             this.InitializeComponent();
 			this.DataContext = this;
+			this._mainWindow = mainWindow;
 		}
+
+		private MainWindow _mainWindow;
+
+		private void SongListElementButton_Click(object sender, RoutedEventArgs e)
+		{
+			_mainWindow.SetCurrentFile(FilePath);
+		}
+
 
 		public static readonly DependencyProperty AlbumArtSourceProperty =
 			DependencyProperty.Register("AlbumArtSource", typeof(BitmapImage), typeof(SongListElement), new PropertyMetadata(null));

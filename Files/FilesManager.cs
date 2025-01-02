@@ -12,6 +12,15 @@ using Microsoft.UI.Xaml.Media.Imaging;
 using System.Threading.Tasks;
 using System.Collections;
 using System.IO;
+using Windows.Storage.Pickers;
+using System.Formats.Tar;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Resources;
+using TagLib;
+//using System.Windows.Media.Imaging;
+using Windows.Graphics.Imaging;
+//using System.Windows.Media.Imaging;
+//using System.Windows.Media.Imaging;
 
 namespace TagEditor.Files
 {
@@ -26,16 +35,16 @@ namespace TagEditor.Files
 			string songName = "";
 			string artists = "";
 			string albumName = "";
-			DateTimeOffset yearOfRelease = DateTimeOffset.MinValue;
+			DateTimeOffset yearOfRelease = new DateTimeOffset(1970,1,1,0,0,0,TimeSpan.Zero);
 			uint discNumber = 1;
 			BitmapImage albumArt;
 			Uri albumArtSource;
-			//MediaSource audioSource;
 			string filePath;
+			TagLib.File tfile = null;
 
-			var tfile = TagLib.File.Create(file.Path);
 
-			//this.SongTitle.Text = tfile.Tag.Title;
+			tfile = TagLib.File.Create(file.Path);
+
 			songName = tfile.Tag.Title;
 			albumName = tfile.Tag.Album;
 
@@ -48,24 +57,16 @@ namespace TagEditor.Files
 					artists += "; ";
 				}
 			}
-			//this.Artist.Text = artists;
 
-
-			//this.Album.Text = tfile.Tag.Album;
-
-			//Debug.Print(tfile.Tag.Year.ToString());
 			if (tfile.Tag.Year != 0)
 			{
 				TimeSpan ts = new(0, 0, 0);
 				yearOfRelease = new DateTimeOffset((int)tfile.Tag.Year, 1, 1, 1, 0, 0, ts);
-				//this.YearOfRelease.Date = new DateTimeOffset((int)tfile.Tag.Year, 1, 1, 1, 0, 0, ts);
 			}
 
 
 			discNumber = tfile.Tag.Disc;
-			//this.DiscNumber.Value = tfile.Tag.Disc;
 
-			bool pictureFound = true;
 
 			albumArt = new BitmapImage();
 			try
@@ -89,37 +90,85 @@ namespace TagEditor.Files
 			}
 			catch
 			{
-				pictureFound = false;
+				//pictureFound = false;
 				//this.Art.Source = null;
 				albumArtSource = new Uri("ms-appx:///Assets/tempCat.jpg");
+
 				albumArt = new BitmapImage(albumArtSource);
+				
+
 			}
 
 
-		//	if (pictureFound)
-		//	{
 
-		//	}
-		//	else
-		//	{
+			filePath = file.Path.ToString();
+
+
+			filesList[filePath] = new AudioFile(songName, albumName, artists, yearOfRelease, discNumber, albumArt, filePath, tfile);
+		}
+
+
+		static public async Task SaveAudioFile(Dictionary<string, AudioFile> filesList, string filePath)
+		{
+			if (System.IO.File.Exists(filePath))
+			{
+				TagLib.File tfile = filesList[filePath].tfile;
+				tfile.Tag.Title = filesList[filePath].songName;
+				tfile.Tag.Album = filesList[filePath].albumName;
+				tfile.Tag.Performers = filesList[filePath].artists.Split(';');
+
+				tfile.Tag.Year = (uint)filesList[filePath].yearOfRelease.Year;
+				tfile.Tag.Disc = filesList[filePath].discNumber;
+
 				
-		//	}
+				try
+				{
+					Uri albumArtSource = filesList[filePath].albumArt.UriSource; // Replace with your actual URI
 
-		
+					//StorageFile imageFile = await StorageFile.GetFileFromApplicationUriAsync(albumArtSource);
+					//using (var stream = await imageFile.OpenReadAsync())
+					//{
+					//	using (var memoryStream = new MemoryStream())
+					//	{
+					//		// Читаем данные из IInputStream и записываем их в MemoryStream
+					//		using (var dataReader = new DataReader(stream))
+					//		{
+					//			uint bytesLoaded = await dataReader.LoadAsync((uint)stream.Size);
+					//			byte[] imageData = new byte[bytesLoaded];
+					//			dataReader.ReadBytes(imageData);
 
-		//albumArtSource = new Uri("ms-appx:///Assets/tempCat.jpg");
-		//albumArt = new BitmapImage(albumArtSource);
+					//			// Создаем объект TagLib.Picture
+					//			var picture = new TagLib.Picture
+					//			{
+					//				Data = new TagLib.ByteVector(imageData),
+					//				Type = TagLib.PictureType.FrontCover, // Установите тип по мере необходимости
+					//				Description = "Cover",
+					//				MimeType = "image/jpeg" // Установите правильный MIME-тип в зависимости от формата изображения
+					//			};
+
+					//			// Присваиваем изображение тегу
+					//			tfile.Tag.Pictures = new[] { picture }; // Используйте массив для установки изображений
+					//		}
+
+					//	}
+					//}
+
+				}
+				catch (Exception)
+				{
+
+				}
+
+				tfile.Save();
+
+			}
+		}
 
 
 
-		//audioSource = MediaSource.CreateFromStorageFile(file);
-		filePath = file.Path.ToString();
 
-//this.MusicPlayer.Source = MediaSource.CreateFromStorageFile(file);
-//this.FilePath.Text = file.Path.ToString();
-filesList[filePath] = new AudioFile(songName, albumName, artists, yearOfRelease, discNumber, albumArt, filePath);
-		//filesList.Add(new AudioFile(songName, albumName, artists, yearOfRelease, discNumber, albumArtSource, filePath));
-	}
+
+
 
 	}
 }

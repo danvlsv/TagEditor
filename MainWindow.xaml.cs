@@ -41,6 +41,7 @@ namespace TagEditor
 	{
 
 		public Dictionary<string,AudioFile> openedFiles = new Dictionary<string,AudioFile>();
+		private string currentFile = "";
 		//public List<AudioFile> openedFiles = new List<AudioFile>();
 
 		public MainWindow()
@@ -72,6 +73,18 @@ namespace TagEditor
 			OpenFile();
 		}
 
+
+
+		private void OpenImageButton_Click(object sender, RoutedEventArgs e)
+		{
+			OpenImage();
+		}
+
+		private void SaveFileButton_Click(object sender, RoutedEventArgs e)
+		{
+			SaveFile();
+		}
+
 		private async void OpenFile()
 		{
 			var filePicker = new FileOpenPicker();
@@ -87,13 +100,8 @@ namespace TagEditor
 			if (file != null && openedFiles.ContainsKey(file.Path)==false)
 			{
 				await FilesManager.OpenAudioFile(openedFiles, file);
-				//var songListElement = new SongListElement();
-				//songListElement.AlbumArtSource = openedFiles[file.Path].albumArtSource;
-				//songListElement.SongName = openedFiles[file.Path].songName; // Название песни
-				//songListElement.ArtistName = openedFiles[file.Path].artists; // Имя исполнителя
-				//songListElement.FilePath = openedFiles[file.Path].filePath;
-				//songListElement.
-				var songListElement = new SongListElement
+
+				var songListElement = new SongListElement(this)
 				{
 					AlbumArtSource = openedFiles[file.Path].albumArt,
 					SongName = openedFiles[file.Path].songName,
@@ -103,6 +111,8 @@ namespace TagEditor
 				this.OpenedSongs.Children.Add(songListElement);
 				this.Welcome.Visibility = Visibility.Collapsed;
 				this.Editor.Visibility = Visibility.Visible;
+				//this.Art.Source = new BitmapImage(new Uri("ms-appx:///Assets/tempCat.jpg"));
+				SetCurrentFile(file.Path);
 				Debug.WriteLine($"File path: {songListElement.FilePath}");
 			}
 			else
@@ -113,6 +123,72 @@ namespace TagEditor
 		}
 
 
+		private async void OpenImage()
+		{
+			var filePicker = new FileOpenPicker();
+			filePicker.FileTypeFilter.Add(".jpeg");
+			filePicker.FileTypeFilter.Add(".png");
+			filePicker.FileTypeFilter.Add(".jpg");
+
+			// Get the current window's HWND by passing in the Window object
+			var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+
+			// Associate the HWND with the file picker
+			WinRT.Interop.InitializeWithWindow.Initialize(filePicker, hwnd);
+
+			var file = await filePicker.PickSingleFileAsync();
+			if (file != null)
+			{
+				BitmapImage newImage = new BitmapImage(new Uri(file.Path));
+				openedFiles[currentFile].albumArt = newImage;
+				this.Art.Source = newImage;
+				
+			}
+			else
+			{
+				ElementSoundPlayer.Play(ElementSoundKind.GoBack);
+			}
+		}
+
+		private async void SaveFile()
+		{
+			SaveToDictionary(currentFile);
+			await FilesManager.SaveAudioFile(openedFiles,currentFile);
+		}
+
+		public void SetCurrentFile(string filePathKey)
+		{
+			if (filePathKey != currentFile)
+			{
+				if (!String.IsNullOrEmpty(currentFile))
+				{
+					SaveToDictionary(currentFile);
+				}
+				
+				currentFile = filePathKey;
+				this.SongTitle.Text = openedFiles[currentFile].songName;
+				this.Artist.Text = openedFiles[currentFile].artists;
+				this.Album.Text = openedFiles[currentFile].albumName;
+				this.YearOfRelease.Date = openedFiles[currentFile].yearOfRelease;
+				this.DiscNumber.Value = openedFiles[currentFile].discNumber;
+				this.Art.Source = openedFiles[currentFile].albumArt;
+			}
+			else
+			{
+				ElementSoundPlayer.Play(ElementSoundKind.GoBack);
+			}
+
+		}
+
+		private void SaveToDictionary(string filePathKey)
+		{
+			openedFiles[currentFile].songName = this.SongTitle.Text;
+			openedFiles[currentFile].artists = this.Artist.Text;
+			openedFiles[currentFile].albumName = this.Album.Text;
+			openedFiles[currentFile].yearOfRelease = this.YearOfRelease.Date;
+			openedFiles[currentFile].discNumber = (uint)this.DiscNumber.Value;
+			openedFiles[currentFile].albumArt = (BitmapImage)this.Art.Source;
+		}
 	}
 
 

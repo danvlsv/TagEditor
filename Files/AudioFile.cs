@@ -19,8 +19,11 @@ namespace TagEditor.Files
 		public BitmapImage albumArt;
 		//MediaSource audioSource;
 		public string filePath;
+		public TagLib.File tfile;
 
-		public AudioFile(string songName, string albumName, string artists, DateTimeOffset yearOfRelease, uint discNumber, BitmapImage albumArt, string filePath)
+		bool saved = false;
+
+		public AudioFile(string songName, string albumName, string artists, DateTimeOffset yearOfRelease, uint discNumber, BitmapImage albumArt, string filePath, TagLib.File tfile)
 		{
 			this.songName = songName;
 			this.albumName = albumName;
@@ -30,6 +33,7 @@ namespace TagEditor.Files
 			this.albumArt= albumArt;
 			//this.audioSource = audioSource;
 			this.filePath = filePath;
+			this.tfile = tfile;
 		}
 	}
 }

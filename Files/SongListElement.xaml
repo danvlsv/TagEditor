@@ -8,18 +8,22 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
+
     <Border Height="100" CornerRadius="10"  Margin="10,0,10,10">
-        <Grid ColumnDefinitions="*,*" Background="#262626">
-            <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top">
-                <Border Width="30" Height="30" CornerRadius="10">
-                    <Image x:Name="SongArtList" Width="50" Height="50" Source="{Binding AlbumArtSource}" ></Image>
-                </Border>
-            </StackPanel>
-            <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top">
-                <TextBlock x:Name="SongNameList" Text="{Binding SongName}" Width="100" />
-                <TextBlock x:Name="ArtistNameList" Text="{Binding ArtistName}" Width="100"/>
-                <TextBlock x:Name="FilePathList" Text="{Binding FilePath}" Width="100"/>
-            </StackPanel>
-        </Grid>
+        <Button Background="Transparent" BorderThickness="0" Padding="0" Click="SongListElementButton_Click">
+            <Grid ColumnDefinitions="80,*" Background="#262626" Padding="10">
+                <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <Border Width="80" Height="80" CornerRadius="10">
+                        <Image x:Name="SongArtList"  Source="{Binding AlbumArtSource}" ></Image>
+                    </Border>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="10,0,0,0">
+                    <TextBlock x:Name="SongNameList" Text="{Binding SongName}" TextTrimming="CharacterEllipsis" />
+                    <TextBlock x:Name="ArtistNameList" Text="{Binding ArtistName}" TextTrimming="CharacterEllipsis"  />
+                    <TextBlock x:Name="FilePathList" Text="{Binding FilePath}" TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+            </Grid>
+        </Button>
     </Border>
+
 </UserControl>
