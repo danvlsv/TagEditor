@@ -1,39 +1,147 @@
 ﻿using Microsoft.UI.Xaml.Media.Imaging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Media.Core;
 
 namespace TagEditor.Files
 {
-	public class AudioFile
+	public class AudioFile : INotifyPropertyChanged
 	{
-		public string songName = "";
-		public string albumName = "";
-		public string artists = "";
-		public DateTimeOffset yearOfRelease;
-		public uint discNumber;
-		//public Uri albumArtSource;
-		public BitmapImage albumArt;
-		//MediaSource audioSource;
-		public string filePath;
-		public TagLib.File tfile;
-
-		bool saved = false;
+		private string songName;
+		private string albumName;
+		private string artists;
+		private DateTimeOffset yearOfRelease;
+		private uint discNumber;
+		private BitmapImage albumArt;
+		private string filePath;
+		private TagLib.File tfile;
 
 		public AudioFile(string songName, string albumName, string artists, DateTimeOffset yearOfRelease, uint discNumber, BitmapImage albumArt, string filePath, TagLib.File tfile)
 		{
-			this.songName = songName;
-			this.albumName = albumName;
-			this.artists = artists;
-			this.yearOfRelease = yearOfRelease;
-			this.discNumber = discNumber;
-			this.albumArt= albumArt;
-			//this.audioSource = audioSource;
-			this.filePath = filePath;
-			this.tfile = tfile;
+			SongName = songName;
+			AlbumName = albumName;
+			Artists = artists;
+			YearOfRelease = yearOfRelease;
+			DiscNumber = discNumber;
+			AlbumArt = albumArt;
+			FilePath = filePath;
+			TFile = tfile;
+		}
+
+		public string SongName
+		{
+			get => songName;
+			set
+			{
+				if (!Equals(songName, value))
+				{
+					songName = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		public string AlbumName
+		{
+			get => albumName;
+			set
+			{
+				if (!Equals(albumName, value))
+				{
+					albumName = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		public string Artists
+		{
+			get => artists;
+			set
+			{
+				if (!Equals(artists, value))
+				{
+					artists = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		public DateTimeOffset YearOfRelease
+		{
+			get => yearOfRelease;
+			set
+			{
+				if (!Equals(yearOfRelease, value))
+				{
+					yearOfRelease = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		public uint DiscNumber
+		{
+			get => discNumber;
+			set
+			{
+				if (!Equals(discNumber, value))
+				{
+					discNumber = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		public BitmapImage AlbumArt
+		{
+			get => albumArt;
+			set
+			{
+				if (!Equals(albumArt, value))
+				{
+					albumArt = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		public string FilePath
+		{
+			get => filePath;
+			set
+			{
+				if (!Equals(filePath, value))
+				{
+					filePath = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		public TagLib.File TFile
+		{
+			get => tfile;
+			set
+			{
+				if (!Equals(tfile, value))
+				{
+					tfile = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }

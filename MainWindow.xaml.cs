@@ -41,6 +41,7 @@ namespace TagEditor
 	{
 
 		public Dictionary<string,AudioFile> openedFiles = new Dictionary<string,AudioFile>();
+		public Dictionary<string, SongListElement> openedFilesControls = new Dictionary<string, SongListElement>();
 		private string currentFile = "";
 		//public List<AudioFile> openedFiles = new List<AudioFile>();
 
@@ -101,19 +102,21 @@ namespace TagEditor
 			{
 				await FilesManager.OpenAudioFile(openedFiles, file);
 
-				var songListElement = new SongListElement(this)
-				{
-					AlbumArtSource = openedFiles[file.Path].albumArt,
-					SongName = openedFiles[file.Path].songName,
-					ArtistName = openedFiles[file.Path].artists,
-					FilePath = openedFiles[file.Path].filePath
-				};
+				var songListElement = new SongListElement(this, openedFiles[file.Path]);
+				openedFilesControls[file.Path] = songListElement;
+				//songListElement.DataContext = openedFiles[file.Path];
+				//{
+				//	AlbumArtSource = openedFiles[file.Path].albumArt,
+				//	SongName = openedFiles[file.Path].songName,
+				//	ArtistName = openedFiles[file.Path].artists,
+				//	FilePath = openedFiles[file.Path].filePath
+				//};
 				this.OpenedSongs.Children.Add(songListElement);
 				this.Welcome.Visibility = Visibility.Collapsed;
 				this.Editor.Visibility = Visibility.Visible;
 				//this.Art.Source = new BitmapImage(new Uri("ms-appx:///Assets/tempCat.jpg"));
 				SetCurrentFile(file.Path);
-				Debug.WriteLine($"File path: {songListElement.FilePath}");
+				//Debug.WriteLine($"File path: {songListElement.FilePath}");
 			}
 			else
 			{
@@ -140,7 +143,7 @@ namespace TagEditor
 			if (file != null)
 			{
 				BitmapImage newImage = new BitmapImage(new Uri(file.Path));
-				openedFiles[currentFile].albumArt = newImage;
+				openedFiles[currentFile].AlbumArt = newImage;
 				this.Art.Source = newImage;
 				
 			}
@@ -166,12 +169,12 @@ namespace TagEditor
 				}
 				
 				currentFile = filePathKey;
-				this.SongTitle.Text = openedFiles[currentFile].songName;
-				this.Artist.Text = openedFiles[currentFile].artists;
-				this.Album.Text = openedFiles[currentFile].albumName;
-				this.YearOfRelease.Date = openedFiles[currentFile].yearOfRelease;
-				this.DiscNumber.Value = openedFiles[currentFile].discNumber;
-				this.Art.Source = openedFiles[currentFile].albumArt;
+				this.SongTitle.Text = openedFiles[currentFile].SongName;
+				this.Artist.Text = openedFiles[currentFile].Artists;
+				this.Album.Text = openedFiles[currentFile].AlbumName;
+				this.YearOfRelease.Date = openedFiles[currentFile].YearOfRelease;
+				this.DiscNumber.Value = openedFiles[currentFile].DiscNumber;
+				this.Art.Source = openedFiles[currentFile].AlbumArt;
 			}
 			else
 			{
@@ -182,12 +185,14 @@ namespace TagEditor
 
 		private void SaveToDictionary(string filePathKey)
 		{
-			openedFiles[currentFile].songName = this.SongTitle.Text;
-			openedFiles[currentFile].artists = this.Artist.Text;
-			openedFiles[currentFile].albumName = this.Album.Text;
-			openedFiles[currentFile].yearOfRelease = this.YearOfRelease.Date;
-			openedFiles[currentFile].discNumber = (uint)this.DiscNumber.Value;
-			openedFiles[currentFile].albumArt = (BitmapImage)this.Art.Source;
+			openedFiles[currentFile].SongName = this.SongTitle.Text;
+			openedFiles[currentFile].Artists = this.Artist.Text;
+			openedFiles[currentFile].AlbumName = this.Album.Text;
+			openedFiles[currentFile].YearOfRelease = this.YearOfRelease.Date;
+			openedFiles[currentFile].DiscNumber = (uint)this.DiscNumber.Value;
+			openedFiles[currentFile].AlbumArt = (BitmapImage)this.Art.Source;
+			//openedFilesControls[currentFile].SetNewFile(openedFiles[currentFile]);
+
 		}
 	}
 

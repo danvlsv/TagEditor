@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:TagEditor.Files"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     mc:Ignorable="d">
 
 
@@ -14,13 +14,13 @@
             <Grid ColumnDefinitions="80,*" Background="#262626" Padding="10">
                 <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center">
                     <Border Width="80" Height="80" CornerRadius="10">
-                        <Image x:Name="SongArtList"  Source="{Binding AlbumArtSource}" ></Image>
+                        <Image x:Name="SongArtImage"  Source="{x:Bind thisFile.AlbumArt, Mode=OneWay}" ></Image>
                     </Border>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="10,0,0,0">
-                    <TextBlock x:Name="SongNameList" Text="{Binding SongName}" TextTrimming="CharacterEllipsis" />
-                    <TextBlock x:Name="ArtistNameList" Text="{Binding ArtistName}" TextTrimming="CharacterEllipsis"  />
-                    <TextBlock x:Name="FilePathList" Text="{Binding FilePath}" TextTrimming="CharacterEllipsis" />
+                    <TextBlock x:Name="SongNameTextBlock" Text="{x:Bind thisFile.SongName, Mode=OneWay}" TextTrimming="CharacterEllipsis" />
+                    <TextBlock x:Name="ArtistNameTextBlock" Text="{x:Bind thisFile.Artists, Mode=OneWay}" TextTrimming="CharacterEllipsis"  />
+                    <TextBlock x:Name="FilePathTextBlock" Text="{x:Bind thisFile.FilePath, Mode=OneWay}" TextTrimming="CharacterEllipsis" />
                 </StackPanel>
             </Grid>
         </Button>

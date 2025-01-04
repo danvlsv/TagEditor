@@ -112,18 +112,18 @@ namespace TagEditor.Files
 		{
 			if (System.IO.File.Exists(filePath))
 			{
-				TagLib.File tfile = filesList[filePath].tfile;
-				tfile.Tag.Title = filesList[filePath].songName;
-				tfile.Tag.Album = filesList[filePath].albumName;
-				tfile.Tag.Performers = filesList[filePath].artists.Split(';');
+				TagLib.File tfile = filesList[filePath].TFile;
+				tfile.Tag.Title = filesList[filePath].SongName;
+				tfile.Tag.Album = filesList[filePath].AlbumName;
+				tfile.Tag.Performers = filesList[filePath].Artists.Split(';');
 
-				tfile.Tag.Year = (uint)filesList[filePath].yearOfRelease.Year;
-				tfile.Tag.Disc = filesList[filePath].discNumber;
+				tfile.Tag.Year = (uint)filesList[filePath].YearOfRelease.Year;
+				tfile.Tag.Disc = filesList[filePath].DiscNumber;
 
 				
 				try
 				{
-					Uri albumArtSource = filesList[filePath].albumArt.UriSource; // Replace with your actual URI
+					Uri albumArtSource = filesList[filePath].AlbumArt.UriSource; // Replace with your actual URI
 
 					//StorageFile imageFile = await StorageFile.GetFileFromApplicationUriAsync(albumArtSource);
 					//using (var stream = await imageFile.OpenReadAsync())
