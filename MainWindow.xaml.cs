@@ -40,19 +40,21 @@ namespace TagEditor
 	public sealed partial class MainWindow : WinUIEx.WindowEx
 	{
 
-		public Dictionary<string,AudioFile> openedFiles = new Dictionary<string,AudioFile>();
+		public Dictionary<string,AudioFile> openedFiles = [];
 		public Dictionary<string, SongListElement> openedFilesControls = new Dictionary<string, SongListElement>();
+
 		private string currentFile = "";
 		//public List<AudioFile> openedFiles = new List<AudioFile>();
 
 		public MainWindow()
 		{
 			this.SetTitleBar(AppTitleBar);
-			//this.MinHeight = 550;
-			//this.MinWidth =850;
+			this.MinHeight = 550;
+			this.MinWidth = 900;
 			this.Height = 550;
 			this.Width = 900;
-			this.IsResizable = false;
+			//this.IsResizable = false;
+			//this.IsMaximizable = false;
 			//this.Title = "Music Player";
 			this.SystemBackdrop = new DesktopAcrylicBackdrop();
 
@@ -104,19 +106,12 @@ namespace TagEditor
 
 				var songListElement = new SongListElement(this, openedFiles[file.Path]);
 				openedFilesControls[file.Path] = songListElement;
-				//songListElement.DataContext = openedFiles[file.Path];
-				//{
-				//	AlbumArtSource = openedFiles[file.Path].albumArt,
-				//	SongName = openedFiles[file.Path].songName,
-				//	ArtistName = openedFiles[file.Path].artists,
-				//	FilePath = openedFiles[file.Path].filePath
-				//};
+
 				this.OpenedSongs.Children.Add(songListElement);
 				this.Welcome.Visibility = Visibility.Collapsed;
 				this.Editor.Visibility = Visibility.Visible;
-				//this.Art.Source = new BitmapImage(new Uri("ms-appx:///Assets/tempCat.jpg"));
+
 				SetCurrentFile(file.Path);
-				//Debug.WriteLine($"File path: {songListElement.FilePath}");
 			}
 			else
 			{
@@ -183,7 +178,7 @@ namespace TagEditor
 
 		}
 
-		private void SaveToDictionary(string filePathKey)
+		private void SaveToDictionary(string  filePathKey)
 		{
 			openedFiles[currentFile].SongName = this.SongTitle.Text;
 			openedFiles[currentFile].Artists = this.Artist.Text;
@@ -191,7 +186,6 @@ namespace TagEditor
 			openedFiles[currentFile].YearOfRelease = this.YearOfRelease.Date;
 			openedFiles[currentFile].DiscNumber = (uint)this.DiscNumber.Value;
 			openedFiles[currentFile].AlbumArt = (BitmapImage)this.Art.Source;
-			//openedFilesControls[currentFile].SetNewFile(openedFiles[currentFile]);
 
 		}
 	}

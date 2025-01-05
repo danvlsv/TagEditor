@@ -28,17 +28,12 @@ namespace TagEditor.Files
         public SongListElement(MainWindow mainWindow, AudioFile audioFile)
         {
             this.InitializeComponent();
+			this.DataContext = audioFile;
 			thisFile = audioFile;
 			this._mainWindow = mainWindow;
 		}
 
-		public void SetNewFile(AudioFile audioFile)
-		{
-			thisFile = audioFile;
-			this.UpdateLayout();
-		}
-
-		private MainWindow _mainWindow;
+		private readonly MainWindow _mainWindow;
 
 		private void SongListElementButton_Click(object sender, RoutedEventArgs e)
 		{
@@ -46,41 +41,6 @@ namespace TagEditor.Files
 		}
 
 
-		//public static readonly DependencyProperty AlbumArtSourceProperty =
-		//	DependencyProperty.Register("AlbumArtSource", typeof(BitmapImage), typeof(SongListElement), new PropertyMetadata(null));
-
-		//public BitmapImage AlbumArtSource
-		//{
-		//	get { return (BitmapImage)GetValue(AlbumArtSourceProperty); }
-		//	set { SetValue(AlbumArtSourceProperty, value); }
-		//}
-
-		//public static readonly DependencyProperty SongNameProperty =
-		//	DependencyProperty.Register("SongName", typeof(string), typeof(SongListElement), new PropertyMetadata(string.Empty));
-
-		//public string SongName
-		//{
-		//	get { return (string)GetValue(SongNameProperty); }
-		//	set { SetValue(SongNameProperty, value); }
-		//}
-
-		//public static readonly DependencyProperty ArtistNameProperty =
-		//	DependencyProperty.Register("ArtistName", typeof(string), typeof(SongListElement), new PropertyMetadata(string.Empty));
-
-		//public string ArtistName
-		//{
-		//	get { return (string)GetValue(ArtistNameProperty); }
-		//	set { SetValue(ArtistNameProperty, value); }
-		//}
-
-		//public static readonly DependencyProperty FilePathProperty =
-		//	DependencyProperty.Register("FilePath", typeof(string), typeof(SongListElement), new PropertyMetadata(string.Empty));
-
-		//public string FilePath
-		//{
-		//	get { return (string)GetValue(FilePathProperty); }
-		//	set { SetValue(FilePathProperty, value);
-		//	}
-		//}
+		
 	}
 }

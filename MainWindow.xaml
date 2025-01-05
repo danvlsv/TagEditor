@@ -39,8 +39,11 @@
         <Grid x:Name ="Editor" Grid.Row="1" ColumnDefinitions="*,2*" RowDefinitions="*,50">
 
             <!-- Opened files -->
-            <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0" Grid.Column="0">
+            <ScrollViewer  VerticalScrollBarVisibility="Auto" Grid.Row="0" Grid.Column="0" >
                 <StackPanel x:Name="OpenedSongs"  Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                <!--<Grid ColumnDefinitions="*"  HorizontalAlignment="Stretch" VerticalAlignment="Top" >-->
+                    
+                <!--</Grid>-->
 
                 </StackPanel>
             </ScrollViewer>
@@ -52,30 +55,30 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-               
 
-                <StackPanel Grid.Column="0" Grid.Row="0" Spacing="10" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
+
+                <StackPanel Grid.Column="0" Grid.Row="0" Spacing="10" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Top">
 
                     <TextBlock>Название:</TextBlock>
                     <TextBox x:Name="SongTitle" ></TextBox>
 
                     <TextBlock>Автор:</TextBlock>
-                    <TextBox x:Name="Artist" Width="300"></TextBox>
+                    <TextBox x:Name="Artist"></TextBox>
 
                     <TextBlock>Альбом:</TextBlock>
-                    <TextBox x:Name="Album" Width="300"></TextBox>
+                    <TextBox x:Name="Album"></TextBox>
 
                     <TextBlock>Год выхода:</TextBlock>
                     <DatePicker Language="ru" x:Name="YearOfRelease" DayVisible="False" MonthVisible="False" />
 
                     <TextBlock>Номер диска:</TextBlock>
-                    <NumberBox x:Name="DiscNumber" Minimum="0"/>
+                    <NumberBox x:Name="DiscNumber" Width="100" Minimum="0"/>
 
                 </StackPanel>
 
-                <StackPanel Grid.Column="1" Grid.Row="0"  Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top">
-                    <Border Width="250" Height="250" CornerRadius="10">
-                        <Image  x:Name="Art" ></Image>
+                <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,10,10" Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+                    <Border CornerRadius="10" MaxHeight="500">
+                        <Image  x:Name="Art"  Stretch="Uniform" ></Image>
                     </Border>
                     <Button Name="OpenImageButton" Click="OpenImageButton_Click" Margin="0,10,0,0">Изменить изображение</Button>
                 </StackPanel>
@@ -87,7 +90,7 @@
             </Grid>
 
 
-            <StackPanel Grid.Row="2" Orientation="Horizontal" Padding="10">
+            <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" Padding="10" Background="#262626">
                 <Button Name="OpenDifferentButton" Click="OpenDifferentButton_Click">Открыть файл</Button>
             </StackPanel>
         </Grid>
