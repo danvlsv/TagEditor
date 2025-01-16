@@ -72,7 +72,7 @@
                     <DatePicker Language="ru" x:Name="YearOfRelease" DayVisible="False" MonthVisible="False" />
 
                     <TextBlock>Номер диска:</TextBlock>
-                    <NumberBox x:Name="DiscNumber" Width="100" Minimum="0"/>
+                    <NumberBox HorizontalAlignment="Stretch" x:Name="DiscNumber" Width="100" Minimum="0"/>
 
                 </StackPanel>
 
