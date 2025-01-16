@@ -40,12 +40,12 @@
 
             <!-- Opened files -->
             <ScrollViewer  VerticalScrollBarVisibility="Auto" Grid.Row="0" Grid.Column="0" >
-                <StackPanel x:Name="OpenedSongs"  Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Stretch">
-                <!--<Grid ColumnDefinitions="*"  HorizontalAlignment="Stretch" VerticalAlignment="Top" >-->
-                    
-                <!--</Grid>-->
+                <StackPanel x:Name="OpenedSongs"  Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
 
-                </StackPanel>
+
+
+                
+        HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </ScrollViewer>
 
             <Grid Grid.Row="0" Grid.Column="1"  RowDefinitions="*,50" >

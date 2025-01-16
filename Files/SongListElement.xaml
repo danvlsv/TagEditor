@@ -28,11 +28,9 @@
                 </StackPanel>
 
                 <Grid Grid.Column="1" Grid.RowDefinitions="*,*,*" Padding="10,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <!--<StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Top" >-->
                     <TextBlock x:Name="SongNameTextBlock" Text="{x:Bind thisFile.SongName, Mode=OneWay}"  HorizontalAlignment="Stretch" TextTrimming="CharacterEllipsis" Grid.Row="0"/>
                     <TextBlock x:Name="ArtistNameTextBlock" Text="{x:Bind thisFile.Artists, Mode=OneWay}"  HorizontalAlignment="Stretch" TextTrimming="CharacterEllipsis"  Grid.Row="1" />
                     <TextBlock x:Name="FilePathTextBlock" Text="{x:Bind thisFile.FilePath, Mode=OneWay}"  HorizontalAlignment="Stretch" TextTrimming="CharacterEllipsis"  Grid.Row="2"/>
-                    <!--</StackPanel>-->
                 </Grid>
 
             </Grid>
