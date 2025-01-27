@@ -37,10 +37,18 @@ namespace TagEditor.Files
 
 		private void SongListElementButton_Click(object sender, RoutedEventArgs e)
 		{
-			_mainWindow.SetCurrentFile(thisFile.FilePath);
+
+				_mainWindow.SetCurrentFile(thisFile.FilePath);
+			
+		}
+
+		private void SongListElementCloseButton_Click(object sender, RoutedEventArgs e)
+		{
+
+			_mainWindow.CloseFile(thisFile.FilePath);
 		}
 
 
-		
+
 	}
 }

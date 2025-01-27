@@ -10,7 +10,11 @@
 
 
     <Border Height="110" CornerRadius="10" Margin="10,0,10,10" HorizontalAlignment="Stretch">
-        <Button Background="Transparent" Padding="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0" Click="SongListElementButton_Click" HorizontalContentAlignment="Stretch">
+        <Button Background="Transparent" Padding="0" 
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                BorderThickness="0" Click="SongListElementButton_Click" 
+                HorizontalContentAlignment="Stretch" 
+                ToolTipService.ToolTip="{x:Bind thisFile.FilePath, Mode=OneWay}">
 
             <Grid Background="#262626" Padding="10" HorizontalAlignment="Stretch">
 
@@ -18,6 +22,8 @@
                     <ColumnDefinition Width="90"/>
 
                     <ColumnDefinition Width="*"/>
+
+                    <ColumnDefinition Width="40"/>
 
                 </Grid.ColumnDefinitions>
 
@@ -27,14 +33,19 @@
                     </Border>
                 </StackPanel>
 
+                <Button Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top" Click="SongListElementCloseButton_Click">
+                    <FontIcon FontSize="10" Glyph="&#xE8BB;" />
+                </Button>
+
                 <Grid Grid.Column="1" Grid.RowDefinitions="*,*,*" Padding="10,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <TextBlock x:Name="SongNameTextBlock" Text="{x:Bind thisFile.SongName, Mode=OneWay}"  HorizontalAlignment="Stretch" TextTrimming="CharacterEllipsis" Grid.Row="0"/>
-                    <TextBlock x:Name="ArtistNameTextBlock" Text="{x:Bind thisFile.Artists, Mode=OneWay}"  HorizontalAlignment="Stretch" TextTrimming="CharacterEllipsis"  Grid.Row="1" />
-                    <TextBlock x:Name="FilePathTextBlock" Text="{x:Bind thisFile.FilePath, Mode=OneWay}"  HorizontalAlignment="Stretch" TextTrimming="CharacterEllipsis"  Grid.Row="2"/>
+                    <TextBlock  x:Name="SongNameTextBlock" Text="{x:Bind thisFile.SongName, Mode=OneWay}"  HorizontalAlignment="Stretch"  FontWeight="Bold" TextTrimming="CharacterEllipsis" Grid.Row="0"/>
+                    <TextBlock Grid.ColumnSpan="2" x:Name="ArtistNameTextBlock" Text="{x:Bind thisFile.Artists, Mode=OneWay}"  HorizontalAlignment="Stretch"   TextTrimming="CharacterEllipsis"  Grid.Row="1" />
+                    <TextBlock Grid.ColumnSpan="2" x:Name="FilePathTextBlock" Text="{x:Bind thisFile.FilePath, Mode=OneWay}"  HorizontalAlignment="Stretch" FontSize="12"  TextTrimming="CharacterEllipsis"  Grid.Row="2"/>
                 </Grid>
 
             </Grid>
         </Button>
+        
     </Border>
 
 

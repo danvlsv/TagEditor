@@ -25,6 +25,8 @@ using System.Drawing.Imaging;
 using Windows.Storage.Streams;
 using Windows.Media.Core;
 using TagEditor.Files;
+using System.Collections;
+using System.Windows.Input;
 //using BitmapImage = System.Windows.Media.Imaging.BitmapImage;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -168,7 +170,7 @@ namespace TagEditor
 				this.Artist.Text = openedFiles[currentFile].Artists;
 				this.Album.Text = openedFiles[currentFile].AlbumName;
 				this.YearOfRelease.Date = openedFiles[currentFile].YearOfRelease;
-				this.DiscNumber.Value = openedFiles[currentFile].DiscNumber;
+				this.TrackNumber.Value = openedFiles[currentFile].TrackNumber;
 				this.Art.Source = openedFiles[currentFile].AlbumArt;
 			}
 			else
@@ -178,13 +180,46 @@ namespace TagEditor
 
 		}
 
+		public void CloseFile(string filePathKey)
+		{
+			if (filePathKey == currentFile)
+			{
+				var listOfPaths = openedFiles.Keys.ToList();
+				int index = listOfPaths.IndexOf(filePathKey);
+				if (openedFiles.Count == 1)
+				{
+					this.Welcome.Visibility = Visibility.Visible;
+					this.Editor.Visibility = Visibility.Collapsed;
+					currentFile = null;
+				}
+				else
+				{
+					if (index == 0)
+					{
+						SetCurrentFile(listOfPaths[index + 1]);
+					}
+					else
+					{
+						SetCurrentFile(listOfPaths[index - 1]);
+					}
+				}
+				
+
+				
+				
+			}
+			openedFiles.Remove(filePathKey);
+			this.OpenedSongs.Children.Remove(openedFilesControls[filePathKey]);
+			openedFilesControls.Remove(filePathKey);
+		}
+
 		private void SaveToDictionary(string  filePathKey)
 		{
 			openedFiles[currentFile].SongName = this.SongTitle.Text;
 			openedFiles[currentFile].Artists = this.Artist.Text;
 			openedFiles[currentFile].AlbumName = this.Album.Text;
 			openedFiles[currentFile].YearOfRelease = this.YearOfRelease.Date;
-			openedFiles[currentFile].DiscNumber = (uint)this.DiscNumber.Value;
+			openedFiles[currentFile].TrackNumber = (uint)this.TrackNumber.Value;
 			openedFiles[currentFile].AlbumArt = (BitmapImage)this.Art.Source;
 
 		}

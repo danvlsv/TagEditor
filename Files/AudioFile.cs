@@ -16,18 +16,18 @@ namespace TagEditor.Files
 		private string albumName;
 		private string artists;
 		private DateTimeOffset yearOfRelease;
-		private uint discNumber;
+		private uint trackNumber;
 		private BitmapImage albumArt;
 		private string filePath;
 		private TagLib.File tfile;
 
-		public AudioFile(string songName, string albumName, string artists, DateTimeOffset yearOfRelease, uint discNumber, BitmapImage albumArt, string filePath, TagLib.File tfile)
+		public AudioFile(string songName, string albumName, string artists, DateTimeOffset yearOfRelease, uint trackNumber, BitmapImage albumArt, string filePath, TagLib.File tfile)
 		{
 			SongName = songName;
 			AlbumName = albumName;
 			Artists = artists;
 			YearOfRelease = yearOfRelease;
-			DiscNumber = discNumber;
+			TrackNumber = trackNumber;
 			AlbumArt = albumArt;
 			FilePath = filePath;
 			TFile = tfile;
@@ -85,14 +85,14 @@ namespace TagEditor.Files
 			}
 		}
 
-		public uint DiscNumber
+		public uint TrackNumber
 		{
-			get => discNumber;
+			get => trackNumber;
 			set
 			{
-				if (!Equals(discNumber, value))
+				if (!Equals(trackNumber, value))
 				{
-					discNumber = value;
+					trackNumber = value;
 					OnPropertyChanged();
 				}
 			}

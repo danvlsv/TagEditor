@@ -36,7 +36,7 @@ namespace TagEditor.Files
 			string artists = "";
 			string albumName = "";
 			DateTimeOffset yearOfRelease = new DateTimeOffset(1970,1,1,0,0,0,TimeSpan.Zero);
-			uint discNumber = 1;
+			uint trackNumber = 1;
 			BitmapImage albumArt;
 			Uri albumArtSource;
 			string filePath;
@@ -65,7 +65,7 @@ namespace TagEditor.Files
 			}
 
 
-			discNumber = tfile.Tag.Disc;
+			trackNumber = tfile.Tag.Track;
 
 
 			albumArt = new BitmapImage();
@@ -104,7 +104,7 @@ namespace TagEditor.Files
 			filePath = file.Path.ToString();
 
 
-			filesList[filePath] = new AudioFile(songName, albumName, artists, yearOfRelease, discNumber, albumArt, filePath, tfile);
+			filesList[filePath] = new AudioFile(songName, albumName, artists, yearOfRelease, trackNumber, albumArt, filePath, tfile);
 		}
 
 
@@ -118,46 +118,46 @@ namespace TagEditor.Files
 				tfile.Tag.Performers = filesList[filePath].Artists.Split(';');
 
 				tfile.Tag.Year = (uint)filesList[filePath].YearOfRelease.Year;
-				tfile.Tag.Disc = filesList[filePath].DiscNumber;
+				tfile.Tag.Track = filesList[filePath].TrackNumber;
 
-				
-				try
-				{
-					Uri albumArtSource = filesList[filePath].AlbumArt.UriSource; // Replace with your actual URI
 
-					//StorageFile imageFile = await StorageFile.GetFileFromApplicationUriAsync(albumArtSource);
-					//using (var stream = await imageFile.OpenReadAsync())
-					//{
-					//	using (var memoryStream = new MemoryStream())
-					//	{
-					//		// Читаем данные из IInputStream и записываем их в MemoryStream
-					//		using (var dataReader = new DataReader(stream))
-					//		{
-					//			uint bytesLoaded = await dataReader.LoadAsync((uint)stream.Size);
-					//			byte[] imageData = new byte[bytesLoaded];
-					//			dataReader.ReadBytes(imageData);
+				//try
+				//{
+				//	Uri albumArtSource = filesList[filePath].AlbumArt.UriSource; // Replace with your actual URI
 
-					//			// Создаем объект TagLib.Picture
-					//			var picture = new TagLib.Picture
-					//			{
-					//				Data = new TagLib.ByteVector(imageData),
-					//				Type = TagLib.PictureType.FrontCover, // Установите тип по мере необходимости
-					//				Description = "Cover",
-					//				MimeType = "image/jpeg" // Установите правильный MIME-тип в зависимости от формата изображения
-					//			};
+				//StorageFile imageFile = await StorageFile.GetFileFromApplicationUriAsync(albumArtSource);
+				//using (var stream = await imageFile.OpenReadAsync())
+				//{
+				//	using (var memoryStream = new MemoryStream())
+				//	{
+				//		// Читаем данные из IInputStream и записываем их в MemoryStream
+				//		using (var dataReader = new DataReader(stream))
+				//		{
+				//			uint bytesLoaded = await dataReader.LoadAsync((uint)stream.Size);
+				//			byte[] imageData = new byte[bytesLoaded];
+				//			dataReader.ReadBytes(imageData);
 
-					//			// Присваиваем изображение тегу
-					//			tfile.Tag.Pictures = new[] { picture }; // Используйте массив для установки изображений
-					//		}
+				//			// Создаем объект TagLib.Picture
+				//			var picture = new TagLib.Picture
+				//			{
+				//				Data = new TagLib.ByteVector(imageData),
+				//				Type = TagLib.PictureType.FrontCover, // Установите тип по мере необходимости
+				//				Description = "Cover",
+				//				MimeType = "image/jpeg" // Установите правильный MIME-тип в зависимости от формата изображения
+				//			};
 
-					//	}
-					//}
+				//			// Присваиваем изображение тегу
+				//			tfile.Tag.Pictures = new[] { picture }; // Используйте массив для установки изображений
+				//		}
 
-				}
-				catch (Exception)
-				{
+				//	}
+				//}
 
-				}
+				//}
+				//catch (Exception)
+				//{
+
+				//}
 
 				tfile.Save();
 
