@@ -35,76 +35,78 @@ namespace TagEditor.Files
 			string songName = "";
 			string artists = "";
 			string albumName = "";
-			DateTimeOffset yearOfRelease = new DateTimeOffset(1970,1,1,0,0,0,TimeSpan.Zero);
+			DateTimeOffset yearOfRelease = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
 			uint trackNumber = 1;
 			BitmapImage albumArt;
 			Uri albumArtSource;
 			string filePath;
 			TagLib.File tfile = null;
-
-
-			tfile = TagLib.File.Create(file.Path);
-
-			songName = tfile.Tag.Title;
-			albumName = tfile.Tag.Album;
-
-			string[] artistsFromFile = tfile.Tag.Performers;
-			for (int i = 0; i < artistsFromFile.Length; i++)
-			{
-				artists += artistsFromFile[i];
-				if (i != artistsFromFile.Length - 1)
-				{
-					artists += "; ";
-				}
-			}
-
-			if (tfile.Tag.Year != 0)
-			{
-				TimeSpan ts = new(0, 0, 0);
-				yearOfRelease = new DateTimeOffset((int)tfile.Tag.Year, 1, 1, 1, 0, 0, ts);
-			}
-
-
-			trackNumber = tfile.Tag.Track;
-
-
-			albumArt = new BitmapImage();
+			//file.Properties
 			try
 			{
-				TagLib.IPicture pic = tfile.Tag.Pictures[0];
-				using (MemoryStream ms = new MemoryStream(pic.Data.Data))
+				tfile = TagLib.File.Create(file.Path);
+
+				songName = tfile.Tag.Title;
+				albumName = tfile.Tag.Album;
+
+				string[] artistsFromFile = tfile.Tag.Performers;
+				for (int i = 0; i < artistsFromFile.Length; i++)
 				{
-					ms.Seek(0, SeekOrigin.Begin);
-
-					// Convert MemoryStream to IRandomAccessStream
-					var randomAccessStream = new InMemoryRandomAccessStream();
-					await ms.CopyToAsync(randomAccessStream.AsStreamForWrite());
-					await randomAccessStream.FlushAsync();
-					randomAccessStream.Seek(0); // Reset the stream position
-
-					// Set the BitmapImage source
-					albumArt = new BitmapImage();
-					await albumArt.SetSourceAsync(randomAccessStream);
-
+					artists += artistsFromFile[i];
+					if (i != artistsFromFile.Length - 1)
+					{
+						artists += "; ";
+					}
 				}
+
+				if (tfile.Tag.Year != 0)
+				{
+					TimeSpan ts = new(0, 0, 0);
+					yearOfRelease = new DateTimeOffset((int)tfile.Tag.Year, 1, 1, 1, 0, 0, ts);
+				}
+
+
+				trackNumber = tfile.Tag.Track;
+
+
+				albumArt = new BitmapImage();
+				try
+				{
+					TagLib.IPicture pic = tfile.Tag.Pictures[0];
+					using (MemoryStream ms = new MemoryStream(pic.Data.Data))
+					{
+						ms.Seek(0, SeekOrigin.Begin);
+
+						// Convert MemoryStream to IRandomAccessStream
+						var randomAccessStream = new InMemoryRandomAccessStream();
+						await ms.CopyToAsync(randomAccessStream.AsStreamForWrite());
+						await randomAccessStream.FlushAsync();
+						randomAccessStream.Seek(0); // Reset the stream position
+
+						// Set the BitmapImage source
+						albumArt = new BitmapImage();
+						await albumArt.SetSourceAsync(randomAccessStream);
+
+					}
+				}
+				catch
+				{
+					albumArtSource = new Uri("ms-appx:///Assets/tempCat.jpg");
+					albumArt = new BitmapImage(albumArtSource);
+				}
+
+
+
+				filePath = file.Path.ToString();
+				filesList[filePath] = new AudioFile(songName, albumName, artists, yearOfRelease, trackNumber, albumArt, filePath, tfile);
 			}
+
 			catch
 			{
-				//pictureFound = false;
-				//this.Art.Source = null;
-				albumArtSource = new Uri("ms-appx:///Assets/tempCat.jpg");
-
-				albumArt = new BitmapImage(albumArtSource);
-				
-
+				throw new FileNotFoundException();
 			}
 
 
-
-			filePath = file.Path.ToString();
-
-
-			filesList[filePath] = new AudioFile(songName, albumName, artists, yearOfRelease, trackNumber, albumArt, filePath, tfile);
 		}
 
 
@@ -120,47 +122,12 @@ namespace TagEditor.Files
 				tfile.Tag.Year = (uint)filesList[filePath].YearOfRelease.Year;
 				tfile.Tag.Track = filesList[filePath].TrackNumber;
 
-
-				//try
-				//{
-				//	Uri albumArtSource = filesList[filePath].AlbumArt.UriSource; // Replace with your actual URI
-
-				//StorageFile imageFile = await StorageFile.GetFileFromApplicationUriAsync(albumArtSource);
-				//using (var stream = await imageFile.OpenReadAsync())
-				//{
-				//	using (var memoryStream = new MemoryStream())
-				//	{
-				//		// Читаем данные из IInputStream и записываем их в MemoryStream
-				//		using (var dataReader = new DataReader(stream))
-				//		{
-				//			uint bytesLoaded = await dataReader.LoadAsync((uint)stream.Size);
-				//			byte[] imageData = new byte[bytesLoaded];
-				//			dataReader.ReadBytes(imageData);
-
-				//			// Создаем объект TagLib.Picture
-				//			var picture = new TagLib.Picture
-				//			{
-				//				Data = new TagLib.ByteVector(imageData),
-				//				Type = TagLib.PictureType.FrontCover, // Установите тип по мере необходимости
-				//				Description = "Cover",
-				//				MimeType = "image/jpeg" // Установите правильный MIME-тип в зависимости от формата изображения
-				//			};
-
-				//			// Присваиваем изображение тегу
-				//			tfile.Tag.Pictures = new[] { picture }; // Используйте массив для установки изображений
-				//		}
-
-				//	}
-				//}
-
-				//}
-				//catch (Exception)
-				//{
-
-				//}
-
 				tfile.Save();
 
+			}
+			else
+			{
+				throw new FileNotFoundException();
 			}
 		}
 

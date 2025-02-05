@@ -13,6 +13,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI.Xaml.Media.Imaging;
+using TagEditor.Controls;
 
 
 // To learn more about WinUI, the WinUI project structure,
@@ -25,27 +26,27 @@ namespace TagEditor.Files
 
 		private AudioFile thisFile;
 
-        public SongListElement(MainWindow mainWindow, AudioFile audioFile)
+        public SongListElement(Editor editor, AudioFile audioFile)
         {
             this.InitializeComponent();
 			this.DataContext = audioFile;
 			thisFile = audioFile;
-			this._mainWindow = mainWindow;
+			this._editor = editor;
 		}
 
-		private readonly MainWindow _mainWindow;
+		private readonly Editor _editor;
 
 		private void SongListElementButton_Click(object sender, RoutedEventArgs e)
 		{
 
-				_mainWindow.SetCurrentFile(thisFile.FilePath);
+			_editor.SetCurrentFile(thisFile.FilePath);
 			
 		}
 
 		private void SongListElementCloseButton_Click(object sender, RoutedEventArgs e)
 		{
 
-			_mainWindow.CloseFile(thisFile.FilePath);
+			_editor.CloseFile(thisFile.FilePath);
 		}
 
 
