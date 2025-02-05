@@ -18,60 +18,78 @@
         <StackPanel x:Name="Welcome" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Button x:Name="WelcomeButton" Click="WelcomeButton_Click">Открыть файл</Button>
         </StackPanel>
-    
-    
-
-
-    <Grid x:Name ="EditorComponent" Grid.Row="0" ColumnDefinitions="*,2*" RowDefinitions="*,50">
-        <!-- Opened files -->
-        <ScrollViewer  VerticalScrollBarVisibility="Auto" Grid.Row="0" Grid.Column="0" >
-            <StackPanel x:Name="OpenedSongs"  Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
-
-        </ScrollViewer>
-
-        <Grid Grid.Row="0" Grid.Column="1"  RowDefinitions="*,50" >
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
 
 
 
-            <StackPanel Grid.Column="0" Grid.Row="0" Spacing="10" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Top">
 
-                <TextBlock>Название:</TextBlock>
-                <TextBox x:Name="SongTitle" ></TextBox>
+        <Grid x:Name ="EditorComponent" Grid.Row="0" ColumnDefinitions="*,2*" RowDefinitions="*,60">
+            <!-- Opened files -->
+            <ScrollViewer  VerticalScrollBarVisibility="Auto" Grid.Row="0" Grid.Column="0" >
+                <StackPanel x:Name="OpenedSongs"  Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
 
-                <TextBlock>Автор:</TextBlock>
-                <TextBox x:Name="Artist"></TextBox>
+            </ScrollViewer>
 
-                <TextBlock>Альбом:</TextBlock>
-                <TextBox x:Name="Album"></TextBox>
+            <ScrollViewer Margin="0,0,10,0" Grid.Row="0" Grid.Column="1" >
+                <Border CornerRadius="10" >
+                    <Grid  Padding="15"   Background="{ThemeResource SmokeFillColorDefaultBrush}">
 
-                <TextBlock>Год выхода:</TextBlock>
-                <DatePicker Language="ru" x:Name="YearOfRelease" DayVisible="False" MonthVisible="False" />
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
 
-                <TextBlock>Номер песни:</TextBlock>
-                <NumberBox HorizontalAlignment="Left" x:Name="TrackNumber" Width="100" Minimum="0"/>
 
-            </StackPanel>
+                        <!-- Tags fields-->
+                        <StackPanel Grid.Column="0" Grid.Row="0" Spacing="10" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Top">
 
-            <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,10,10" Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
-                <Border CornerRadius="10" MaxHeight="500">
-                    <Image  x:Name="Art"  Stretch="Uniform" ></Image>
+                            <TextBlock>Название:</TextBlock>
+                            <TextBox x:Name="SongTitle" ></TextBox>
+
+                            <TextBlock>Автор:</TextBlock>
+                            <TextBox x:Name="Artist"></TextBox>
+
+                            <TextBlock>Альбом:</TextBlock>
+                            <TextBox x:Name="Album"></TextBox>
+
+                            <TextBlock>Год выхода:</TextBlock>
+                            <DatePicker Language="ru" x:Name="YearOfRelease" DayVisible="False" MonthVisible="False" />
+
+                            <TextBlock>Номер песни:</TextBlock>
+                            <NumberBox HorizontalAlignment="Left" x:Name="TrackNumber" Width="100" Minimum="0"/>
+
+                        </StackPanel>
+
+
+                        <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,0,10" Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+                            <Border CornerRadius="10">
+                                <Image  x:Name="Art"  Stretch="Uniform" ></Image>
+                            </Border>
+                            <!--<Button Name="OpenImageButton" Click="OpenImageButton_Click" Margin="0,10,0,0">Изменить изображение</Button>-->
+                        </StackPanel>
+
+
+                        <!--<StackPanel Grid.ColumnSpan="2" Grid.Row="1"  Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="10">
+                    <Button Name="SaveFileButton" Click="SaveFileButton_Click">Сохранить изменения</Button>
+                </StackPanel>-->
+                    </Grid>
                 </Border>
-                <!--<Button Name="OpenImageButton" Click="OpenImageButton_Click" Margin="0,10,0,0">Изменить изображение</Button>-->
-            </StackPanel>
+            </ScrollViewer>
 
-            <StackPanel Grid.ColumnSpan="2" Grid.Row="1"  Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="10">
-                <Button Name="SaveFileButton" Click="SaveFileButton_Click">Сохранить изменения</Button>
-            </StackPanel>
+
+            <Grid Margin="0,10,0,0" Grid.Row="1" Grid.ColumnSpan="2" Padding="10" Background="#262626">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Name="OpenDifferentButton" Click="OpenDifferentButton_Click" Grid.Column="0">Открыть файл</Button>
+                <Button Name="SaveFileButton" Click="SaveFileButton_Click" Grid.Column="1" HorizontalAlignment="Right">Сохранить изменения</Button>
+
+            </Grid>
+
+            <!--<StackPanel Orientation="Horizontal">
+                <Button Name="OpenDifferentButton" Click="OpenDifferentButton_Click">Открыть файл</Button>
+            </StackPanel>-->
         </Grid>
-
-        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" Padding="10" Background="#262626">
-            <Button Name="OpenDifferentButton" Click="OpenDifferentButton_Click">Открыть файл</Button>
-        </StackPanel>
-    </Grid>
     </Grid>
 </UserControl>

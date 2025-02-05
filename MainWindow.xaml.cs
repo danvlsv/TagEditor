@@ -60,7 +60,7 @@ namespace TagEditor
 
 			ElementSoundPlayer.State = ElementSoundPlayerState.On;
 			//this.Editor.Visibility = Visibility.Collapsed;
-			this.PersistenceId = "MainWindowSize";
+			//this.PersistenceId = "MainWindowSize";
 		}
 
 		//private void WelcomeButton_Click(object sender, RoutedEventArgs e)

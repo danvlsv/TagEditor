@@ -16,7 +16,7 @@
                 HorizontalContentAlignment="Stretch" 
                 ToolTipService.ToolTip="{x:Bind thisFile.FilePath, Mode=OneWay}">
 
-            <Grid Background="#262626" Padding="10" HorizontalAlignment="Stretch">
+            <Grid Background="{ThemeResource SmokeFillColorDefaultBrush}" Padding="10" HorizontalAlignment="Stretch">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="90"/>
