@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <UserControl
     x:Class="TagEditor.Controls.Editor"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -52,7 +52,7 @@
                             <TextBox x:Name="Album"></TextBox>
 
                             <TextBlock>Год выхода:</TextBlock>
-                            <DatePicker Language="ru" x:Name="YearOfRelease" DayVisible="False" MonthVisible="False" />
+                            <DatePicker Language="ru" x:Name="YearOfRelease" DayVisible="False" Width="100" MonthVisible="False" />
 
                             <TextBlock>Номер песни:</TextBlock>
                             <NumberBox HorizontalAlignment="Left" x:Name="TrackNumber" Width="100" Minimum="0"/>

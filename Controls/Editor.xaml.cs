@@ -1,4 +1,4 @@
-using Microsoft.UI.Xaml;
+﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
@@ -38,11 +38,11 @@ namespace TagEditor.Controls
 			this.EditorComponent.Visibility = Visibility.Collapsed;
 		}
 
-
-		private async void OpenFile()
+		private async void OpenFiles()
 		{
 			var filePicker = new FileOpenPicker();
 			filePicker.FileTypeFilter.Add(".mp3");
+			filePicker.ViewMode = PickerViewMode.List; // Optional: Set the view mode
 
 			// Get the current window's HWND by passing in the Window object
 			var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.m_window);
@@ -50,41 +50,97 @@ namespace TagEditor.Controls
 			// Associate the HWND with the file picker
 			WinRT.Interop.InitializeWithWindow.Initialize(filePicker, hwnd);
 
-			var file = await filePicker.PickSingleFileAsync();
-			if (file != null && openedFiles.ContainsKey(file.Path) == false)
+			// Allow multiple file selection
+			var files = await filePicker.PickMultipleFilesAsync();
+			if (files.Count > 0)
 			{
-				try
+				foreach (var file in files)
 				{
-					await FilesManager.OpenAudioFile(openedFiles, file);
+					if (file != null && !openedFiles.ContainsKey(file.Path))
+					{
+						try
+						{
+							await FilesManager.OpenAudioFile(openedFiles, file);
 
-					var songListElement = new SongListElement(this, openedFiles[file.Path]);
-					openedFilesControls[file.Path] = songListElement;
+							var songListElement = new SongListElement(this, openedFiles[file.Path]);
+							openedFilesControls[file.Path] = songListElement;
 
-					this.OpenedSongs.Children.Add(songListElement);
-					this.Welcome.Visibility = Visibility.Collapsed;
-					this.EditorComponent.Visibility = Visibility.Visible;
+							this.OpenedSongs.Children.Add(songListElement);
+							this.Welcome.Visibility = Visibility.Collapsed;
+							this.EditorComponent.Visibility = Visibility.Visible;
 
-					SetCurrentFile(file.Path);
+							SetCurrentFile(file.Path);
+						}
+						catch
+						{
+							ContentDialog dialog = new();
+							dialog.XamlRoot = this.Content.XamlRoot;
+							dialog.Title = "File has corrupt metadata";
+							dialog.CloseButtonText = "Ok";
+							dialog.DefaultButton = ContentDialogButton.Close;
+							dialog.Content = $"File:\n\n{file.Path}\n\n is corrupt.";
+
+							await dialog.ShowAsync();
+						}
+					}
+					else
+					{
+						ElementSoundPlayer.Play(ElementSoundKind.GoBack);
+					}
 				}
-				catch
-				{
-					ContentDialog dialog = new();
-					dialog.XamlRoot = this.Content.XamlRoot;
-					dialog.Title = "File has corrupt metadata";
-					dialog.CloseButtonText = "Ok";
-					dialog.DefaultButton = ContentDialogButton.Close;
-					dialog.Content = $"File:\n\n{file.Path}\n\n is corrupt.";
-
-					await dialog.ShowAsync();
-				}
-
 			}
 			else
 			{
 				ElementSoundPlayer.Play(ElementSoundKind.GoBack);
 			}
-
 		}
+
+		//private async void OpenFile()
+		//{
+		//	var filePicker = new FileOpenPicker();
+		//	filePicker.FileTypeFilter.Add(".mp3");
+
+		//	// Get the current window's HWND by passing in the Window object
+		//	var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.m_window);
+
+		//	// Associate the HWND with the file picker
+		//	WinRT.Interop.InitializeWithWindow.Initialize(filePicker, hwnd);
+
+		//	var file = await filePicker.PickSingleFileAsync();
+		//	if (file != null && openedFiles.ContainsKey(file.Path) == false)
+		//	{
+		//		try
+		//		{
+		//			await FilesManager.OpenAudioFile(openedFiles, file);
+
+		//			var songListElement = new SongListElement(this, openedFiles[file.Path]);
+		//			openedFilesControls[file.Path] = songListElement;
+
+		//			this.OpenedSongs.Children.Add(songListElement);
+		//			this.Welcome.Visibility = Visibility.Collapsed;
+		//			this.EditorComponent.Visibility = Visibility.Visible;
+
+		//			SetCurrentFile(file.Path);
+		//		}
+		//		catch
+		//		{
+		//			ContentDialog dialog = new();
+		//			dialog.XamlRoot = this.Content.XamlRoot;
+		//			dialog.Title = "File has corrupt metadata";
+		//			dialog.CloseButtonText = "Ok";
+		//			dialog.DefaultButton = ContentDialogButton.Close;
+		//			dialog.Content = $"File:\n\n{file.Path}\n\n is corrupt.";
+
+		//			await dialog.ShowAsync();
+		//		}
+
+		//	}
+		//	else
+		//	{
+		//		ElementSoundPlayer.Play(ElementSoundKind.GoBack);
+		//	}
+
+		//}
 
 
 		private async void OpenImage()
@@ -224,12 +280,12 @@ namespace TagEditor.Controls
 		private void WelcomeButton_Click(object sender, RoutedEventArgs e)
 		{
 
-			OpenFile();
+			OpenFiles();
 		}
 
 		private void OpenDifferentButton_Click(object sender, RoutedEventArgs e)
 		{
-			OpenFile();
+			OpenFiles();
 		}
 
 
