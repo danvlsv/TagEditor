@@ -144,4 +144,7 @@
   <data name="SongNumberTextBlock.Text" xml:space="preserve">
     <value>Track number</value>
   </data>
+  <data name="SaveAllFilesButton.Content" xml:space="preserve">
+    <value>Save changes in all files</value>
+  </data>
 </root>

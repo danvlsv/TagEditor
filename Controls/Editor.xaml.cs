@@ -144,6 +144,39 @@ namespace TagEditor.Controls
 
 		}
 
+		private async void SaveAllFiles()
+		{
+
+			foreach (var file in openedFiles.Keys)
+			{
+
+				SaveToDictionary(file);
+				try
+				{
+					await FilesManager.SaveAudioFile(openedFiles, file);
+				}
+				catch (Exception ex)
+				{
+					if (ex is FileNotFoundException)
+					{
+						ContentDialog dialog = new();
+						dialog.XamlRoot = this.Content.XamlRoot;
+						dialog.Title = "File not found";
+						dialog.CloseButtonText = "Ok";
+						dialog.DefaultButton = ContentDialogButton.Close;
+						dialog.Content = $"File:\n\n{file}\n\nwasn't found.";
+
+
+						CloseFile(file);
+						await dialog.ShowAsync();
+
+
+					}
+				}
+			}
+
+		}
+
 		public void SetCurrentFile(string filePathKey)
 		{
 			if (filePathKey != currentFile)
@@ -218,6 +251,11 @@ namespace TagEditor.Controls
 		private void SaveFileButton_Click(object sender, RoutedEventArgs e)
 		{
 			SaveFile();
+		}
+
+		private void SaveAllFilesButton_Click(object sender, RoutedEventArgs e)
+		{
+			SaveAllFiles();
 		}
 
 		private void WelcomeButton_Click(object sender, RoutedEventArgs e)
