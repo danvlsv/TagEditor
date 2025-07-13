@@ -1,20 +1,13 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using TagEditor.Files;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Storage.Pickers;
 using Microsoft.UI.Xaml.Media.Imaging;
+//using System.Windows.Controls;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -88,60 +81,13 @@ namespace TagEditor.Controls
 						ElementSoundPlayer.Play(ElementSoundKind.GoBack);
 					}
 				}
+				this.OpenedSongsViewer.ChangeView(null, this.OpenedSongsViewer.ScrollableHeight, null);
 			}
 			else
 			{
 				ElementSoundPlayer.Play(ElementSoundKind.GoBack);
 			}
 		}
-
-		//private async void OpenFile()
-		//{
-		//	var filePicker = new FileOpenPicker();
-		//	filePicker.FileTypeFilter.Add(".mp3");
-
-		//	// Get the current window's HWND by passing in the Window object
-		//	var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.m_window);
-
-		//	// Associate the HWND with the file picker
-		//	WinRT.Interop.InitializeWithWindow.Initialize(filePicker, hwnd);
-
-		//	var file = await filePicker.PickSingleFileAsync();
-		//	if (file != null && openedFiles.ContainsKey(file.Path) == false)
-		//	{
-		//		try
-		//		{
-		//			await FilesManager.OpenAudioFile(openedFiles, file);
-
-		//			var songListElement = new SongListElement(this, openedFiles[file.Path]);
-		//			openedFilesControls[file.Path] = songListElement;
-
-		//			this.OpenedSongs.Children.Add(songListElement);
-		//			this.Welcome.Visibility = Visibility.Collapsed;
-		//			this.EditorComponent.Visibility = Visibility.Visible;
-
-		//			SetCurrentFile(file.Path);
-		//		}
-		//		catch
-		//		{
-		//			ContentDialog dialog = new();
-		//			dialog.XamlRoot = this.Content.XamlRoot;
-		//			dialog.Title = "File has corrupt metadata";
-		//			dialog.CloseButtonText = "Ok";
-		//			dialog.DefaultButton = ContentDialogButton.Close;
-		//			dialog.Content = $"File:\n\n{file.Path}\n\n is corrupt.";
-
-		//			await dialog.ShowAsync();
-		//		}
-
-		//	}
-		//	else
-		//	{
-		//		ElementSoundPlayer.Play(ElementSoundKind.GoBack);
-		//	}
-
-		//}
-
 
 		private async void OpenImage()
 		{
@@ -151,7 +97,7 @@ namespace TagEditor.Controls
 			filePicker.FileTypeFilter.Add(".jpg");
 
 			// Get the current window's HWND by passing in the Window object
-			var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+			var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.m_window);
 
 			// Associate the HWND with the file picker
 			WinRT.Interop.InitializeWithWindow.Initialize(filePicker, hwnd);
@@ -263,7 +209,6 @@ namespace TagEditor.Controls
 			openedFiles[currentFile].YearOfRelease = this.YearOfRelease.Date;
 			openedFiles[currentFile].TrackNumber = (uint)this.TrackNumber.Value;
 			openedFiles[currentFile].AlbumArt = (BitmapImage)this.Art.Source;
-
 		}
 
 
@@ -279,7 +224,6 @@ namespace TagEditor.Controls
 
 		private void WelcomeButton_Click(object sender, RoutedEventArgs e)
 		{
-
 			OpenFiles();
 		}
 
@@ -287,9 +231,6 @@ namespace TagEditor.Controls
 		{
 			OpenFiles();
 		}
-
-
-
 
 	}
 }

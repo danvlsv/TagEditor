@@ -1,142 +1,122 @@
 ﻿using System;
 using System.Collections.Generic;
-//using System.Windows.Media.Imaging;
-using Windows.Media.Core;
+using System.IO;
+using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Streams;
-
-//using System.Windows.Media.Imaging;
-
-
 using Microsoft.UI.Xaml.Media.Imaging;
-using System.Threading.Tasks;
-using System.Collections;
-using System.IO;
-using Windows.Storage.Pickers;
-using System.Formats.Tar;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Resources;
 using TagLib;
-//using System.Windows.Media.Imaging;
-using Windows.Graphics.Imaging;
-//using System.Windows.Media.Imaging;
-//using System.Windows.Media.Imaging;
 
 namespace TagEditor.Files
 {
 	public class FilesManager
 	{
-
-
-
-
-		static public async Task OpenAudioFile(Dictionary<string, AudioFile> filesList, StorageFile file)
+		public static async Task OpenAudioFile(Dictionary<string, AudioFile> filesList, StorageFile file)
 		{
 			string songName = "";
 			string artists = "";
 			string albumName = "";
 			DateTimeOffset yearOfRelease = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
 			uint trackNumber = 1;
-			BitmapImage albumArt;
-			Uri albumArtSource;
-			string filePath;
+			BitmapImage albumArt = null;
+			string filePath = file.Path;
 			TagLib.File tfile = null;
-			//file.Properties
+
 			try
 			{
-				tfile = TagLib.File.Create(file.Path);
+				tfile = TagLib.File.Create(filePath);
 
-				songName = tfile.Tag.Title;
-				albumName = tfile.Tag.Album;
-
-				string[] artistsFromFile = tfile.Tag.Performers;
-				for (int i = 0; i < artistsFromFile.Length; i++)
-				{
-					artists += artistsFromFile[i];
-					if (i != artistsFromFile.Length - 1)
-					{
-						artists += "; ";
-					}
-				}
+				songName = tfile.Tag.Title ?? "";
+				albumName = tfile.Tag.Album ?? "";
+				artists = (tfile.Tag.Performers != null && tfile.Tag.Performers.Length > 0)
+					? string.Join("; ", tfile.Tag.Performers)
+					: "";
 
 				if (tfile.Tag.Year != 0)
 				{
-					TimeSpan ts = new(0, 0, 0);
-					yearOfRelease = new DateTimeOffset((int)tfile.Tag.Year, 1, 1, 1, 0, 0, ts);
+					yearOfRelease = new DateTimeOffset((int)tfile.Tag.Year, 1, 1, 0, 0, 0, TimeSpan.Zero);
 				}
-
 
 				trackNumber = tfile.Tag.Track;
 
-
-				albumArt = new BitmapImage();
-				try
+				// Обработка обложки
+				if (tfile.Tag.Pictures is { Length: > 0 })
 				{
-					TagLib.IPicture pic = tfile.Tag.Pictures[0];
-					using (MemoryStream ms = new MemoryStream(pic.Data.Data))
+					try
 					{
+						var pic = tfile.Tag.Pictures[0];
+						using var ms = new MemoryStream(pic.Data.Data);
 						ms.Seek(0, SeekOrigin.Begin);
-
-						// Convert MemoryStream to IRandomAccessStream
 						var randomAccessStream = new InMemoryRandomAccessStream();
 						await ms.CopyToAsync(randomAccessStream.AsStreamForWrite());
 						await randomAccessStream.FlushAsync();
-						randomAccessStream.Seek(0); // Reset the stream position
+						randomAccessStream.Seek(0);
 
-						// Set the BitmapImage source
 						albumArt = new BitmapImage();
 						await albumArt.SetSourceAsync(randomAccessStream);
-
 					}
+					catch
+					{
+						albumArt = new BitmapImage(new Uri("ms-appx:///Assets/tempCat.jpg"));
+					}
+				}
+				else
+				{
+					albumArt = new BitmapImage(new Uri("ms-appx:///Assets/tempCat.jpg"));
+				}
+
+				filesList[filePath] = new AudioFile(songName, albumName, artists, yearOfRelease, trackNumber, albumArt, filePath, tfile);
+			}
+			catch (Exception ex)
+			{
+				throw new FileNotFoundException($"Ошибка при открытии файла: {ex.Message}", ex);
+			}
+		}
+
+		public static async Task SaveAudioFile(Dictionary<string, AudioFile> filesList, string filePath)
+		{
+			if (!System.IO.File.Exists(filePath))
+				throw new FileNotFoundException();
+
+			var tfile = filesList[filePath].TFile;
+			tfile.Tag.Title = filesList[filePath].SongName;
+			tfile.Tag.Album = filesList[filePath].AlbumName;
+			tfile.Tag.Performers = filesList[filePath].Artists.Split(';', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+			tfile.Tag.Year = (uint)filesList[filePath].YearOfRelease.Year;
+			tfile.Tag.Track = filesList[filePath].TrackNumber;
+
+			var albumArt = filesList[filePath].AlbumArt;
+			if (albumArt?.UriSource is { } uriSource && !string.IsNullOrWhiteSpace(uriSource.OriginalString))
+			{
+				StorageFile imageFile = null;
+				try
+				{
+					imageFile = uriSource.IsFile
+						? await StorageFile.GetFileFromPathAsync(uriSource.LocalPath)
+						: await StorageFile.GetFileFromApplicationUriAsync(uriSource);
 				}
 				catch
 				{
-					albumArtSource = new Uri("ms-appx:///Assets/tempCat.jpg");
-					albumArt = new BitmapImage(albumArtSource);
+					imageFile = null;
 				}
 
+				if (imageFile != null)
+				{
+					using var stream = await imageFile.OpenStreamForReadAsync();
+					byte[] imageBytes = new byte[stream.Length];
+					await stream.ReadAsync(imageBytes, 0, (int)stream.Length);
 
-
-				filePath = file.Path.ToString();
-				filesList[filePath] = new AudioFile(songName, albumName, artists, yearOfRelease, trackNumber, albumArt, filePath, tfile);
+					var picture = new TagLib.Picture
+					{
+						Data = imageBytes,
+						Type = PictureType.FrontCover
+					};
+					tfile.Tag.Pictures = new TagLib.IPicture[] { picture };
+				}
 			}
 
-			catch
-			{
-				throw new FileNotFoundException();
-			}
-
-
+			tfile.Save();
 		}
-
-
-		static public async Task SaveAudioFile(Dictionary<string, AudioFile> filesList, string filePath)
-		{
-			if (System.IO.File.Exists(filePath))
-			{
-				TagLib.File tfile = filesList[filePath].TFile;
-				tfile.Tag.Title = filesList[filePath].SongName;
-				tfile.Tag.Album = filesList[filePath].AlbumName;
-				tfile.Tag.Performers = filesList[filePath].Artists.Split(';');
-
-				tfile.Tag.Year = (uint)filesList[filePath].YearOfRelease.Year;
-				tfile.Tag.Track = filesList[filePath].TrackNumber;
-
-				tfile.Save();
-
-			}
-			else
-			{
-				throw new FileNotFoundException();
-			}
-		}
-
-
-
-
-
-
-
 	}
 }
 
