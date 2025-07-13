@@ -1,31 +1,36 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media; // Используйте это пространство имен
+using System.Windows.Media; // Удалите, если не нужно
 using TagEditor.Controls;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using Windows.UI.ViewManagement;
 
 namespace TagEditor.Files
 {
-    public sealed partial class SongListElement : UserControl
-    {
-
+	public sealed partial class SongListElement : UserControl
+	{
 		private AudioFile thisFile;
+		private UISettings uiSettings = new UISettings();
+		private Windows.UI.Color accentColor;
+		private readonly Editor _editor;
 
-        public SongListElement(Editor editor, AudioFile audioFile)
-        {
-            this.InitializeComponent();
+		public SongListElement(Editor editor, AudioFile audioFile)
+		{
+			this.InitializeComponent();
 			this.DataContext = audioFile;
 			thisFile = audioFile;
 			this._editor = editor;
+			uiSettings.ColorValuesChanged += ColorValuesChanged;
 		}
 
-		private readonly Editor _editor;
+		private void ColorValuesChanged(UISettings sender, object args)
+		{
+			accentColor = sender.GetColorValue(UIColorType.Accent);
+		}
 
 		private void SongListElementButton_Click(object sender, RoutedEventArgs e)
 		{
 			_editor.SetCurrentFile(thisFile.FilePath);
-			
 		}
 
 		private void SongListElementCloseButton_Click(object sender, RoutedEventArgs e)
@@ -33,5 +38,9 @@ namespace TagEditor.Files
 			_editor.CloseFile(thisFile.FilePath);
 		}
 
+		public void SetBorderColor(bool active)
+		{
+			this.BorderBrush = new Microsoft.UI.Xaml.Media.SolidColorBrush(accentColor);
+		}
 	}
 }

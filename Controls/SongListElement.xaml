@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <UserControl
     x:Class="TagEditor.Files.SongListElement"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -9,7 +9,7 @@
     mc:Ignorable="d">
 
 
-    <Border Height="110" CornerRadius="10" Margin="10,0,10,10" HorizontalAlignment="Stretch">
+    <Border BorderThickness="2" Height="90" CornerRadius="6" Margin="0,0,3,5" HorizontalAlignment="Stretch">
         <Button Background="Transparent" Padding="0" 
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                 BorderThickness="0" Click="SongListElementButton_Click" 
@@ -19,7 +19,7 @@
             <Grid Background="{ThemeResource SmokeFillColorDefaultBrush}" Padding="10" HorizontalAlignment="Stretch">
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="70"/>
 
                     <ColumnDefinition Width="*"/>
 
@@ -28,7 +28,7 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Border Width="90" Height="90" CornerRadius="10">
+                    <Border Width="70" Height="70" CornerRadius="10">
                         <Image x:Name="SongArtImage" Source="{x:Bind thisFile.AlbumArt, Mode=OneWay}" />
                     </Border>
                 </StackPanel>
@@ -45,8 +45,7 @@
 
             </Grid>
         </Button>
-        
-    </Border>
 
+    </Border>
 
 </UserControl>

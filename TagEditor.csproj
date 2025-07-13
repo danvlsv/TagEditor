@@ -83,4 +83,5 @@
     <PublishTrimmed Condition="'$(Configuration)' != 'Debug'">True</PublishTrimmed>
     <PublishAot>True</PublishAot>
   </PropertyGroup>
+
 </Project>

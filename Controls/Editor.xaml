@@ -8,30 +8,26 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Padding="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-
         <StackPanel x:Name="Welcome" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button x:Name="WelcomeButton" Click="WelcomeButton_Click">Открыть файл</Button>
+            <Button x:Name="WelcomeButton" x:Uid="WelcomeButton" Click="WelcomeButton_Click"/>
         </StackPanel>
 
-
-
-
         <Grid x:Name ="EditorComponent" Grid.Row="0" ColumnDefinitions="*,2*" RowDefinitions="*,60">
-            <!-- Opened files -->
-            <ScrollViewer x:Name="OpenedSongsViewer" Padding="0,0,5,0" VerticalScrollBarVisibility="Auto" Grid.Row="0" Grid.Column="0" >
-                <StackPanel x:Name="OpenedSongs"  Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
 
+            <!-- Opened files -->
+            <ScrollViewer x:Name="OpenedSongsViewer" Margin="5,0,0,0" Padding="0,0,5,0" VerticalScrollBarVisibility="Auto" Grid.Row="0" Grid.Column="0" >
+                <StackPanel x:Name="OpenedSongs"  Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
             </ScrollViewer>
 
-            <ScrollViewer Margin="0,0,10,0" Grid.Row="0" Grid.Column="1" >
-                <Border CornerRadius="10" >
-                    <Grid  Padding="15"   Background="{ThemeResource SmokeFillColorDefaultBrush}">
+            <ScrollViewer Margin="0,0,5,0" Grid.Row="0" Grid.Column="1" >
+                <Border CornerRadius="6">
+                    <Grid Padding="15" Background="{ThemeResource SmokeFillColorDefaultBrush}">
 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="4*"/>
@@ -42,19 +38,20 @@
                         <!-- Tags fields-->
                         <StackPanel Grid.Column="0" Grid.Row="0" Spacing="10" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Top">
 
-                            <TextBlock>Название:</TextBlock>
+                            <TextBlock x:Uid="SongTitleTextBlock"/>
                             <TextBox x:Name="SongTitle" ></TextBox>
 
-                            <TextBlock>Автор:</TextBlock>
+                            <TextBlock x:Uid="ArtistTextBlock"/>
                             <TextBox x:Name="Artist"></TextBox>
 
-                            <TextBlock>Альбом:</TextBlock>
+                            <TextBlock x:Uid="AlbumTextBlock"/>
                             <TextBox x:Name="Album"></TextBox>
 
-                            <TextBlock>Год выхода:</TextBlock>
-                            <DatePicker Language="ru" x:Name="YearOfRelease" DayVisible="False" MonthVisible="False" />
+                            <TextBlock x:Uid="YoRTextBlock"/>
+                            <!--Language="ru"-->
+                            <DatePicker x:Name="YearOfRelease" DayVisible="False" MonthVisible="False" />
 
-                            <TextBlock>Номер песни:</TextBlock>
+                            <TextBlock x:Uid="SongNumberTextBlock"/>
                             <NumberBox HorizontalAlignment="Left" x:Name="TrackNumber" Width="100" Minimum="0"/>
 
                         </StackPanel>
@@ -62,14 +59,15 @@
 
                         <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,0,10" Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
                             <Border CornerRadius="10">
-                                <Image  x:Name="Art"  Stretch="Uniform" ></Image>
+                                <Image x:Name="Art" Stretch="Uniform" ></Image>
                             </Border>
-                            <Button Name="OpenImageButton" Click="OpenImageButton_Click" Margin="0,10,0,0">Изменить изображение</Button>
+                            <Button HorizontalAlignment="Center" Name="OpenImageButton" x:Uid="OpenImageButton" Click="OpenImageButton_Click" Margin="0,10,0,0"/>
                         </StackPanel>
 
                     </Grid>
                 </Border>
             </ScrollViewer>
+
 
 
             <Grid Margin="0,10,0,0" Grid.Row="1" Grid.ColumnSpan="2" Padding="10" Background="#262626">
@@ -78,8 +76,8 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Name="OpenDifferentButton" Click="OpenDifferentButton_Click" Grid.Column="0">Открыть файл</Button>
-                <Button Name="SaveFileButton" Click="SaveFileButton_Click" Grid.Column="1" HorizontalAlignment="Right">Сохранить изменения</Button>
+                <Button Name="OpenDifferentButton" Click="OpenDifferentButton_Click" Grid.Column="0" x:Uid="OpenDifferentButton"/>
+                <Button Name="SaveFileButton" x:Uid="SaveFileButton" Click="SaveFileButton_Click" Grid.Column="1" HorizontalAlignment="Right"/>
 
             </Grid>
 

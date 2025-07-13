@@ -7,6 +7,8 @@ using System.Linq;
 using TagEditor.Files;
 using Windows.Storage.Pickers;
 using Microsoft.UI.Xaml.Media.Imaging;
+using Windows.UI;
+using Microsoft.UI.Xaml.Media;
 //using System.Windows.Controls;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -22,11 +24,9 @@ namespace TagEditor.Controls
 
 		private string currentFile = "";
 
-		//Window mainWindow;
 
 		public Editor()
 		{
-			//mainWindow = App.m_window;
 			this.InitializeComponent();
 			this.EditorComponent.Visibility = Visibility.Collapsed;
 		}
@@ -35,7 +35,7 @@ namespace TagEditor.Controls
 		{
 			var filePicker = new FileOpenPicker();
 			filePicker.FileTypeFilter.Add(".mp3");
-			filePicker.ViewMode = PickerViewMode.List; // Optional: Set the view mode
+			filePicker.ViewMode = PickerViewMode.List;
 
 			// Get the current window's HWND by passing in the Window object
 			var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.m_window);
@@ -160,6 +160,7 @@ namespace TagEditor.Controls
 				this.YearOfRelease.Date = openedFiles[currentFile].YearOfRelease;
 				this.TrackNumber.Value = openedFiles[currentFile].TrackNumber;
 				this.Art.Source = openedFiles[currentFile].AlbumArt;
+				//openedFilesControls[filePathKey].SetBorderColor(true);
 			}
 			else
 			{
@@ -177,7 +178,7 @@ namespace TagEditor.Controls
 				if (openedFiles.Count == 1)
 				{
 					this.Welcome.Visibility = Visibility.Visible;
-					this.Visibility = Visibility.Collapsed;
+					this.EditorComponent.Visibility = Visibility.Collapsed;
 					currentFile = null;
 				}
 				else
@@ -191,9 +192,6 @@ namespace TagEditor.Controls
 						SetCurrentFile(listOfPaths[index - 1]);
 					}
 				}
-
-
-
 
 			}
 			openedFiles.Remove(filePathKey);
